@@ -6,7 +6,6 @@ from aiogram import executor, Dispatcher
 from bot.handlers import dp
 from bot.data.config import db
 from bot.data.loader import scheduler
-# from tgbot.utils.other_functions import update_profit_week, update_profit_day, autobackup_db
 
 logging.basicConfig(format=u'%(filename)s [LINE:%(lineno)d] #%(levelname)-8s [%(asctime)s]  %(message)s', level=logging.INFO)
 colorama.init()
