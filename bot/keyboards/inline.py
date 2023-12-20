@@ -17,11 +17,29 @@ def main_menu():
 
     return keyboard
 
+def back_to_main_menu():
+    keyboard = InlineKeyboardMarkup()
+    kb = []
+
+    kb.append(InlineKeyboardButton("В главное меню", callback_data="back_to_main_menu"))
+    keyboard.add(kb[0])
+
+    return keyboard
+
 async def genre_list():
    kb = InlineKeyboardMarkup()
    list = await db.get_all_genre()
    for btn in list:
       kb.add(InlineKeyboardButton(btn['name'], callback_data=f"genre:{btn['name']}"))
    kb.add(InlineKeyboardButton("➕ Новый жанр", callback_data=f"new_genre"))
+
+   return kb
+
+async def books_list_kb():
+   kb = InlineKeyboardMarkup()
+   list = await db.get_all_books()
+   kb.add(InlineKeyboardButton("🔍 Поиск", callback_data=f"search"))
+   for btn in list:
+      kb.add(InlineKeyboardButton(f"{btn['name']} | {btn['author']}", callback_data=f"one_book:{btn['id']}"))
 
    return kb

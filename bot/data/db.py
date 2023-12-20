@@ -31,8 +31,22 @@ class DB(AsyncClass):
         row = await self.con.execute(sql)
         return await row.fetchall()
     
+    async def get_all_books(self):
+        sql = "SELECT * FROM book"
+        row = await self.con.execute(sql)
+        return await row.fetchall()
+    
+    async def get_one_book(self, id):
+        row = await self.con.execute("SELECT * FROM book WHERE id = ?", (id,))
+        return await row.fetchone()
+
+    
     async def new_books(self, name, author, description, genre):
         await self.con.execute(f"INSERT INTO book(name, author, description, genre) VALUES (?, ?, ?, ?)", (name, author, description, genre))
+        await self.con.commit()
+
+    async def new_genre(self, name):
+        await self.con.execute(f"INSERT INTO genre(name) VALUES (?)", (name,))
         await self.con.commit()
 
 
