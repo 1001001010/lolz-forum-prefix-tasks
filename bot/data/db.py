@@ -47,17 +47,19 @@ class DB(AsyncClass):
                                    "name TEXT)")
             await self.con.execute("INSERT INTO genre("
                                    "name) "
-                                    "VALUES (?)", ('Романы',))
-            # await self.con.execute("INSERT INTO genre("
-            #                        "name) "
-            #                         "VALUES (?)", 'Сказки')
-            # await self.con.execute("INSERT INTO genre("
-            #                        "name) "
-            #                         "VALUES (?)", 'Детективы')
-            # await self.con.execute("INSERT INTO genre("
-            #                        "name) "
-            #                         "VALUES (?)", 'Ужасы')
-            # await self.con.execute("INSERT INTO genre("
-            #                        "name) "
-            #                         "VALUES (?)", 'Комиксы')
+                                    "VALUES (?)", ['Романы'])
+            await self.con.execute("INSERT INTO genre("
+                                   "name) "
+                                    "VALUES (?)", ['Сказки'])
+            await self.con.execute("INSERT INTO genre("
+                                   "name) "
+                                    "VALUES (?)", ['Детективы'])
+            await self.con.execute("INSERT INTO genre("
+                                   "name) "
+                                    "VALUES (?)", ['Ужасы'])
+            await self.con.execute("INSERT INTO genre("
+                                   "name) "
+                                    "VALUES (?)", ['Комиксы'])
             print("database was not found (Genre | 2/2), creating...")
+
+            await self.con.commit()
