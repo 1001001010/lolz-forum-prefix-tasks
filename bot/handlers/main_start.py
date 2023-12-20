@@ -4,8 +4,8 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import Message, CallbackQuery
-from bot.keyboards.inline import main_menu, genre_list, back_to_main_menu, books_list_kb
-from bot.states.user import New_book
+from bot.keyboards.inline import main_menu, genre_list, back_to_main_menu, books_list_kb, delete_book_kb
+from bot.states.user import New_book,Search
 from bot.data.config import db
 
 @dp.message_handler(commands=['start'], state="*")
@@ -24,12 +24,29 @@ async def books_list(call: CallbackQuery, state: FSMContext):
     await state.finish()
     await call.message.edit_text(f"Весь список книг нашей библиотеки:\n\nМожете вопспользоваться поиском по ключевым словам", reply_markup=await books_list_kb())
 
+@dp.callback_query_handler(text="search", state="*")
+async def books_list(call: CallbackQuery, state: FSMContext):
+    await state.finish()
+    await call.message.edit_text(f"Введите ключевое слово для поиска")
+    await Search.word.set()
+
+
 @dp.callback_query_handler(text_startswith="one_book", state="*")
 async def one_book_info(call: CallbackQuery, state: FSMContext):
     await state.finish()
     book_id = call.data.split(":")[1]
+    await call.message.delete()
     book_info = await db.get_one_book(id = book_id)
-    await call.message.answer(f"Название: {book_info['name']}\nАвтор: {book_info['author']}\nЖанр: {book_info['genre']}\n\nОписание: {book_info['description']}")
+    await call.message.answer(f"Название: {book_info['name']}\nАвтор: {book_info['author']}\nЖанр: {book_info['genre']}\n\nОписание: {book_info['description']}", reply_markup=await delete_book_kb(id = book_id))
+
+@dp.callback_query_handler(text_startswith="delete", state="*")
+async def one_book_info(call: CallbackQuery, state: FSMContext):
+    await state.finish()
+    book_id = call.data.split(":")[1]
+    await call.message.delete()
+    await db.delete_book(id=book_id)
+    await call.message.answer("Книга успешно удалена")
+
 
 @dp.callback_query_handler(text="new_book", state="*")
 async def new_book(call: CallbackQuery, state: FSMContext):

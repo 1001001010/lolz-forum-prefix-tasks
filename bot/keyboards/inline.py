@@ -43,3 +43,9 @@ async def books_list_kb():
       kb.add(InlineKeyboardButton(f"{btn['name']} | {btn['author']}", callback_data=f"one_book:{btn['id']}"))
 
    return kb
+
+async def delete_book_kb(id):
+   kb = InlineKeyboardMarkup()
+   kb.add(InlineKeyboardButton("🗑️ Удалить книгу", callback_data=f"delete:{id}"))
+
+   return kb

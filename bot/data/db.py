@@ -49,6 +49,10 @@ class DB(AsyncClass):
         await self.con.execute(f"INSERT INTO genre(name) VALUES (?)", (name,))
         await self.con.commit()
 
+    async def delete_book(self, id):
+        await self.con.execute(f"DELETE FROM book WHERE id = ?", (id,))
+        await self.con.commit()
+
 
     async def create_db(self):
         book_info = await self.con.execute("PRAGMA table_info(book)")
