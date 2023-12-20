@@ -20,11 +20,22 @@ def dict_factory(cursor, row):
 
     return save_dict
 
+#Проверка и создание бд
 class DB(AsyncClass):
     async def __ainit__(self):
         self.con = await aiosqlite.connect(path_db)
         self.con.row_factory = dict_factory
         
+    async def get_all_genre(self):
+        sql = "SELECT * FROM genre"
+        row = await self.con.execute(sql)
+        return await row.fetchall()
+    
+    async def new_books(self, name, author, description, genre):
+        await self.con.execute(f"INSERT INTO book(name, author, description, genre) VALUES (?, ?, ?, ?)", (name, author, description, genre))
+        await self.con.commit()
+
+
     async def create_db(self):
         book_info = await self.con.execute("PRAGMA table_info(book)")
         if len(await book_info.fetchall()) == 5:
