@@ -6,6 +6,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from bot.data.config import bot_token
 
-bot = Bot(token=bot_token, parse_mode=ParseMode.HTML)
-dp = Dispatcher(bot, storage=MemoryStorage())
-scheduler = AsyncIOScheduler()
+
+bot = Bot(token=bot_token, parse_mode=ParseMode.HTML) #Экземляр бота
+dp = Dispatcher(bot, storage=MemoryStorage()) #Диспетчер
+scheduler = AsyncIOScheduler() #Планировщик задач

@@ -16,6 +16,7 @@ loop = asyncio.get_event_loop()
 task = loop.create_task(main_db())
 db = loop.run_until_complete(task)
 
+# Чтение конфига
 read_config = configparser.ConfigParser()
 read_config.read("settings.ini")
 
