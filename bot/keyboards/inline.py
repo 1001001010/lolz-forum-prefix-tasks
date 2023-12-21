@@ -1,6 +1,7 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from bot.data.config import db
 
+#Основное
 def main_menu():
    """
    Создание инлайн клавиатуры | Главное меню
@@ -24,6 +25,7 @@ def back_to_main_menu():
 
    return keyboard
 
+#Жанры
 async def genre_list():
    """
    Создание инлайн клавиатуры | Список жанров и кнопка добавления нового жанра
@@ -46,22 +48,7 @@ async def search_by_egre():
       kb.add(InlineKeyboardButton(btn['name'], callback_data=f"searc_by_genre:{btn['name']}"))
 
    return kb
-
-async def list_search_by_genre(name):
-   """
-   Создание инлайн клавиатуры | Список книг с определыннм жанром и кнопка возврата в главное меню
-   """
-   kb = InlineKeyboardMarkup()
-   list = await db.get_books_by_genre(name)
-   if len(list) == 0:
-      kb.add(InlineKeyboardButton('Ничего не найдено', callback_data="none"))
-   else:
-      for btn in list:
-         kb.add(InlineKeyboardButton(btn['name'], callback_data=f"one_book:{btn['id']}"))
-   kb.add(InlineKeyboardButton("В главное меню", callback_data="back_to_main_menu"))
-
-   return kb
-
+#Книги
 async def books_list_kb():
    """
    Создание инлайн клавиатуры | Список книг, кнопка поиска, Кнопка вывода списка с определынным жанром и кнопка возврата в главное меню
@@ -78,6 +65,17 @@ async def books_list_kb():
    keyboard.add(kb[2])
    return keyboard
 
+async def delete_book_kb(id):
+   """
+   Создание инлайн клавиатуры | Кнопка удаления книги и возврата в главное меню
+   """
+   kb = InlineKeyboardMarkup()
+   kb.add(InlineKeyboardButton("🗑️ Удалить книгу", callback_data=f"delete:{id}"))
+   kb.add(InlineKeyboardButton("В главное меню", callback_data="back_to_main_menu"))
+
+   return kb
+
+#Поиск
 async def seach_list_kb(word):
    """
    Создание инлайн клавиатуры | Список найденных книг и кнопка возврата назад
@@ -90,12 +88,17 @@ async def seach_list_kb(word):
 
    return kb
 
-async def delete_book_kb(id):
+async def list_search_by_genre(name):
    """
-   Создание инлайн клавиатуры | Кнопка удаления книги и возврата в главное меню
+   Создание инлайн клавиатуры | Список книг с определыннм жанром и кнопка возврата в главное меню
    """
    kb = InlineKeyboardMarkup()
-   kb.add(InlineKeyboardButton("🗑️ Удалить книгу", callback_data=f"delete:{id}"))
+   list = await db.get_books_by_genre(name)
+   if len(list) == 0:
+      kb.add(InlineKeyboardButton('Ничего не найдено', callback_data="none"))
+   else:
+      for btn in list:
+         kb.add(InlineKeyboardButton(btn['name'], callback_data=f"one_book:{btn['id']}"))
    kb.add(InlineKeyboardButton("В главное меню", callback_data="back_to_main_menu"))
 
    return kb
