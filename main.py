@@ -18,8 +18,8 @@ async def on_startup(dp: Dispatcher):
         dp (Dispatcher)
     """
 
-    print(colorama.Fore.GREEN + "=======================")
-    print(colorama.Fore.RED + "Бот успешно запущен")
+    print(colorama.Fore.RED + "=======================")
+    print(colorama.Fore.GREEN + "Бот успешно запущен")
     print(colorama.Fore.LIGHTBLUE_EX + "Разработчик: https://t.me/lll10010010")
     print(colorama.Fore.RESET)
 
