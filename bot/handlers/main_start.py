@@ -69,7 +69,7 @@ async def one_book_info(call: CallbackQuery, state: FSMContext):
     book_id = call.data.split(":")[1]
     await call.message.delete()
     await db.delete_book(id=book_id)
-    await call.message.answer("Книга успешно удалена")
+    await call.message.answer("Книга успешно удалена", reply_markup=back_to_main_menu())
 
 
 @dp.callback_query_handler(text="new_book", state="*")

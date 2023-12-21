@@ -54,7 +54,7 @@ async def list_search_by_genre(name):
    kb = InlineKeyboardMarkup()
    list = await db.get_books_by_genre(name)
    if len(list) == 0:
-      kb.add(InlineKeyboardButton('Ничего не найдено', callback_data=f"one_book:{btn['id']}"))
+      kb.add(InlineKeyboardButton('Ничего не найдено', callback_data="none"))
    else:
       for btn in list:
          kb.add(InlineKeyboardButton(btn['name'], callback_data=f"one_book:{btn['id']}"))
@@ -66,15 +66,17 @@ async def books_list_kb():
    """
    Создание инлайн клавиатуры | Список книг, кнопка поиска, Кнопка вывода списка с определынным жанром и кнопка возврата в главное меню
    """
-   kb = InlineKeyboardMarkup()
+   keyboard = InlineKeyboardMarkup()
+   kb = []
    list = await db.get_all_books()
-   kb.add(InlineKeyboardButton("🔍 Поиск", callback_data=f"search"))
-   kb.add(InlineKeyboardButton("✒️ Поиск по жанру", callback_data=f"search_genre"))
+   kb.append(InlineKeyboardButton("🔍 Поиск", callback_data=f"search"))
+   kb.append(InlineKeyboardButton("✒️ Поиск по жанру", callback_data=f"search_genre"))
+   kb.append(InlineKeyboardButton("В главное меню", callback_data="back_to_main_menu"))
+   keyboard.add(kb[0], kb[1])
    for btn in list:
-      kb.add(InlineKeyboardButton(f"{btn['name']} | {btn['author']}", callback_data=f"one_book:{btn['id']}"))
-   kb.add(InlineKeyboardButton("В главное меню", callback_data="back_to_main_menu"))
-
-   return kb
+      keyboard.add(InlineKeyboardButton(f"{btn['name']} | {btn['author']}", callback_data=f"one_book:{btn['id']}"))
+   keyboard.add(kb[2])
+   return keyboard
 
 async def seach_list_kb(word):
    """
@@ -90,9 +92,10 @@ async def seach_list_kb(word):
 
 async def delete_book_kb(id):
    """
-   Создание инлайн клавиатуры | Кнопка удаления книги
+   Создание инлайн клавиатуры | Кнопка удаления книги и возврата в главное меню
    """
    kb = InlineKeyboardMarkup()
    kb.add(InlineKeyboardButton("🗑️ Удалить книгу", callback_data=f"delete:{id}"))
+   kb.add(InlineKeyboardButton("В главное меню", callback_data="back_to_main_menu"))
 
    return kb

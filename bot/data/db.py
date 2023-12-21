@@ -30,8 +30,7 @@ class DB(AsyncClass):
         """
         Получение всех жанров
         """
-        sql = "SELECT * FROM genre"
-        row = await self.con.execute(sql)
+        row = await self.con.execute("SELECT * FROM genre")
         return await row.fetchall()
     
     async def get_books_by_genre(self, name):
@@ -45,12 +44,12 @@ class DB(AsyncClass):
         """
         Получение всех книг
         """
-        sql = "SELECT * FROM book"
-        row = await self.con.execute(sql)
+        row = await self.con.execute("SELECT * FROM book")
         return await row.fetchall()
     
     async def search_by_word(self, word):
-        """Поиск по ключевому слову
+        """
+        Поиск по ключевому слову
 
         Args:
             word (str): Ключевое слово
@@ -60,7 +59,8 @@ class DB(AsyncClass):
         return await row.fetchall()
 
     async def get_one_book(self, id):
-        """Получение информации о одной книге
+        """
+        Получение информации о одной книге
 
         Args:
             id (str): ID книги
@@ -70,7 +70,8 @@ class DB(AsyncClass):
 
     
     async def new_books(self, name, author, description, genre):
-        """Добавление новой книги
+        """
+        Добавление новой книги
 
         Args:
             name (str): Название книги
@@ -82,7 +83,8 @@ class DB(AsyncClass):
         await self.con.commit()
 
     async def new_genre(self, name):
-        """Добавление нового жанра
+        """
+        Добавление нового жанра
 
         Args:
             name (str): Название жанра
@@ -91,12 +93,19 @@ class DB(AsyncClass):
         await self.con.commit()
 
     async def delete_book(self, id):
+        """
+        Удаление книги
+
+        Args:
+            id (str): id
+        """
         await self.con.execute(f"DELETE FROM book WHERE id = ?", (id,))
         await self.con.commit()
 
 
     async def create_db(self):
-        """Проверка на существование бд и ее создание
+        """
+        Проверка на существование бд и ее создание
         """
         book_info = await self.con.execute("PRAGMA table_info(book)")
         if len(await book_info.fetchall()) == 5:
